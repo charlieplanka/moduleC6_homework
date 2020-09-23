@@ -1,0 +1,83 @@
+body {
+    font-family: "Golos Text", sans-serif;
+    font-size: 13px;
+}
+
+.chat-wrapper {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.chat {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    box-sizing: border-box;
+}
+
+.chat-input {
+    padding: 10px;
+}
+
+.chat-input > .msg-input {
+    padding-left: 5px;
+    width: 400px;
+    height: 25px;
+    border: 3px solid rgb(186,215,236);
+    font-family: inherit;
+}
+
+.chat-input > .msg-input::placeholder {
+    color: rgb(181,181,181);
+    font-family: "Golos Text", sans-serif;
+}
+
+.chat-input > .send-msg-btn,
+.chat-input > .geo-location-btn {
+    margin-left: 8px;
+    width: 100px;
+    height: 31px;
+    background-color: rgb(186,215,236);
+    border: none;
+    border-radius: 3px;
+    color: rgb(99, 99, 99);
+    font-family: inherit;
+}
+
+.chat-window {
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px 10px 10px;
+    padding: 10px;
+    min-height: 300px;
+    border: 3px solid rgb(186,215,236);
+}
+
+.msg {
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 3px solid rgb(186,215,236);
+    border-radius: 10px;
+}
+
+.msg > a {
+    text-decoration: none;
+    color: rgb(40,107,184);
+}
+
+.server {
+    align-self: flex-start;
+}
+
+.client {
+    align-self: flex-end;
+}
+
+@font-face {
+    font-family: "Golos Text";
+    src: url("../fonts/Golos_Text_Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
