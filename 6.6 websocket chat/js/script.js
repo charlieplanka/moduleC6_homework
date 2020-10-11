@@ -1,6 +1,21 @@
 const msgsWindow = document.querySelector(".chat-window");
 const echoServerUrl = "wss://echo.websocket.org/";
 
+const websocket = new WebSocket(echoServerUrl);
+
+websocket.onopen = function() {
+    console.log("Websoket: connected");
+}
+
+websocket.onmessage = function(evt) {
+    console.log("Websocket: message recieved");
+    displayMsg(evt.data, msgsWindow, "server");
+}
+
+websocket.onerror = function(evt) {
+    console.log("Websocket: error occured", evt.data);
+}
+
 const sendBtn = document.querySelector(".send-msg-btn");
 
 sendBtn.addEventListener("click", () => {
@@ -9,7 +24,7 @@ sendBtn.addEventListener("click", () => {
         return;
     }
     displayMsg(msgText, msgsWindow, "client");
-    sendMsgToServer(msgText, echoServerUrl, sendToChat=true);
+    sendMsgToServer(msgText);
 })
 
 function displayMsg(msg, msgSection, sender) {
@@ -24,20 +39,8 @@ function displayMsg(msg, msgSection, sender) {
     msgSection.appendChild(msgNode);
 }
 
-function sendMsgToServer(msg, serverUrl, sendToChat) {
-    const websocket = new WebSocket(serverUrl);
-    websocket.onopen = function(evt) {
-        websocket.send(msg);
-    };
-    websocket.onmessage = function(evt) {
-        if (sendToChat) {
-            displayMsg(evt.data, msgsWindow, "server");
-        }
-        websocket.close();
-    };
-    websocket.onerror = function(evt) {
-        console.log("error occured", evt.data);
-    };
+function sendMsgToServer(msg) {    
+    websocket.send(msg);
 }
 
 const geoBtn = document.querySelector(".geo-location-btn");
@@ -50,7 +53,7 @@ geoBtn.addEventListener("click", () => {
             geoUrl = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
             geoHTML = `<a href="${geoUrl}" target="_blank">Ваша геолокация</a>`;
             displayMsg(geoHTML, msgsWindow, "client");
-            sendMsgToServer(geoUrl, echoServerUrl, sendToChat=false);
+            sendMsgToServer(geoUrl);
         }, (error) => {
             if (error.code == error.PERMISSION_DENIED)
                 displayMsg("Геолокация недоступна &#x26D4", msgsWindow, "client");
