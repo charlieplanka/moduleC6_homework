@@ -6,6 +6,10 @@ function initWebsocket(url) {
 
     websocket.onopen = function () {
         console.log("Websocket: connected");
+        const disabledButtons = document.querySelectorAll("button:disabled");
+        for (let button of disabledButtons) {
+            button.disabled = false;
+        }
     }
 
     websocket.onmessage = function (evt) {
@@ -39,11 +43,7 @@ sendBtn.addEventListener("click", () => {
 function displayMsg(msg, msgSection, sender) {
     let msgNode = document.createElement("span");
     msgNode.setAttribute("class", "msg");
-    if (sender === "client") {
-        msgNode.classList.add("client");
-    } else if (sender === "server") {
-        msgNode.classList.add("server");
-    }
+    msgNode.classList.add(sender);
     msgNode.innerHTML = msg;
     msgSection.appendChild(msgNode);
 }

@@ -46,6 +46,12 @@ body {
     font-family: inherit;
 }
 
+button.send-msg-btn:disabled,
+button.geo-location-btn:disabled {
+    background-color: rgb(194, 194, 194);
+    color: rgb(153, 153, 153);
+}
+
 .chat-window {
     display: flex;
     flex-direction: column;
