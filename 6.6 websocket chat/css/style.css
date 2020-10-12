@@ -73,11 +73,11 @@ button.geo-location-btn:disabled {
     color: rgb(40,107,184);
 }
 
-.server {
+.left {
     align-self: flex-start;
 }
 
-.client {
+.right {
     align-self: flex-end;
 }
 
