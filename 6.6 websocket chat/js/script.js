@@ -14,10 +14,11 @@ function initWebsocket(url) {
 
     websocket.onmessage = function (evt) {
         console.log("Websocket: message recieved");
-        let { msg, displayInChat } = JSON.parse(evt.data);
-        if (displayInChat) {
-            displayMsg(msg, msgsWindow, "server");
+        let { msg, displaySide, isGeoLink } = JSON.parse(evt.data);
+        if (isGeoLink) {
+            msg = `<a href="${msg}" target="_blank">Ваша геолокация</a>`;
         }
+        displayMsg(msg, msgsWindow, displaySide);
     }
 
     websocket.onerror = function (evt) {
@@ -36,22 +37,23 @@ sendBtn.addEventListener("click", () => {
     if (!msgText) {
         return;
     }
-    displayMsg(msgText, msgsWindow, "client");
-    sendMsgToServer(msgText, displayInChat=true);
+    displayMsg(msgText, msgsWindow, "right");
+    sendMsgToServer(msgText, displaySide = "left", isGeoLink = false);
 })
 
-function displayMsg(msg, msgSection, sender) {
+function displayMsg(msg, msgSection, displaySide) {
     let msgNode = document.createElement("span");
     msgNode.setAttribute("class", "msg");
-    msgNode.classList.add(sender);
+    msgNode.classList.add(displaySide);
     msgNode.innerHTML = msg;
     msgSection.appendChild(msgNode);
 }
 
-function sendMsgToServer(msg, displayInChat=true) {    
+function sendMsgToServer(msg, displaySide, isGeoLink) {    
     const msgData = {
         msg: msg,
-        displayInChat: displayInChat
+        displaySide: displaySide,
+        isGeoLink: isGeoLink
     }
     const msgStr = JSON.stringify(msgData);
     websocket.send(msgStr);
@@ -65,15 +67,13 @@ geoBtn.addEventListener("click", () => {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
             geoUrl = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
-            geoHTML = `<a href="${geoUrl}" target="_blank">Ваша геолокация</a>`;
-            displayMsg(geoHTML, msgsWindow, "client");
-            sendMsgToServer(geoUrl, displayInChat=false);
+            sendMsgToServer(geoUrl, displaySide = "right", isGeoLink = true);
         }, (error) => {
             if (error.code == error.PERMISSION_DENIED)
-                displayMsg("Геолокация недоступна &#x26D4", msgsWindow, "client");
+                displayMsg("Геолокация недоступна &#x26D4", msgsWindow, "right");
         })
     } else {
-        displayMsg("Геолокация недоступна &#x26D4", msgsWindow, "client");
+        displayMsg("Геолокация недоступна &#x26D4", msgsWindow, "right");
     }
 })
 
